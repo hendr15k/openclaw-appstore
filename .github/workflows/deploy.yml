@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages + Build APK
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -39,3 +39,98 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  build-android:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fix webDir (build www from root)
+        run: |
+          mkdir -p www/screenshots
+          cp index.html www/
+          cp manifest.json www/ 2>/dev/null || true
+          cp sw.js www/ 2>/dev/null || true
+          cp icon-192.png www/ 2>/dev/null || true
+          cp icon-512.png www/ 2>/dev/null || true
+          cp -r screenshots/* www/screenshots/ 2>/dev/null || true
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Decode Keystore
+        run: |
+          mkdir -p android/app
+          echo "${{ secrets.APPSTORE_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.jks
+          ls -lh android/app/release.jks
+
+      - name: Build Release APK (Signed)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon \
+            -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/android/app/release.jks \
+            -Pandroid.injected.signing.store.password=${{ secrets.APPSTORE_KEYSTORE_PASS }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.APPSTORE_KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.APPSTORE_KEY_PASS }}
+
+      - name: Zipalign Check
+        run: |
+          $ANDROID_HOME/build-tools/*/zipalign -c 4 $GITHUB_WORKSPACE/android/app/build/outputs/apk/release/app-release.apk || echo "zipalign: warning (non-blocking)"
+
+      - name: Define release metadata
+        id: meta
+        env:
+          TAG: nightly
+        run: |
+          echo "tag_name=$TAG" >> "$GITHUB_OUTPUT"
+          echo "release_name=AppStore Nightly" >> "$GITHUB_OUTPUT"
+
+      - name: Publish nightly
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.meta.outputs.tag_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -fa "$TAG" -m "$TAG" 2>/dev/null || true
+          git push origin "refs/tags/$TAG" --force 2>/dev/null || true
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "AppStore Nightly" --notes "Auto-built from latest commit" --prerelease
+          else
+            gh release create "$TAG" --title "AppStore Nightly" --notes "Auto-built from latest commit" --prerelease
+          fi
+
+          gh release upload "$TAG" \
+            android/app/build/outputs/apk/debug/app-debug.apk \
+            android/app/build/outputs/apk/release/app-release.apk \
+            --clobber

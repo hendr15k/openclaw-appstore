@@ -1,0 +1,1 @@
+{"name":"openclaw-appstore","version":"1.0.0","private":true,"scripts":{"build":"echo no build needed - static site"},"dependencies":{"@capacitor/android":"^8.3.0","@capacitor/cli":"^8.3.0","@capacitor/core":"^8.3.0"}}

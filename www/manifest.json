@@ -1,0 +1,36 @@
+{
+  "name": "Hendrik's AppStore",
+  "short_name": "AppStore",
+  "description": "Open-Source Android Apps — Direkt als APK herunterladen",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#6c63ff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Open Reader",
+      "short_name": "Reader",
+      "url": "https://github.com/hendr15k/open-reader/releases/tag/nightly"
+    },
+    {
+      "name": "Sci-Fi App",
+      "short_name": "Sci-Fi",
+      "url": "https://github.com/hendr15k/sci-fi-app/releases/tag/nightly"
+    }
+  ]
+}
