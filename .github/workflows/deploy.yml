@@ -27,7 +27,7 @@ jobs:
       - name: Prepare Pages artifact
         run: |
           mkdir -p _pages
-          cp index.html manifest.json sw.js icon-192.png icon-512.png _headers _pages/ 2>/dev/null || true
+          cp index.html manifest.json sw.js www/app.js icon-192.png icon-512.png _headers _pages/ 2>/dev/null || true
           mkdir -p _pages/screenshots
           cp screenshots/* _pages/screenshots/ 2>/dev/null || true
         
