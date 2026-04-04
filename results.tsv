@@ -1,0 +1,2 @@
+commit	score	description
+baseline	1	Initial baseline: lazy-loading only, 12.4KB inline HTML, no features, single column
