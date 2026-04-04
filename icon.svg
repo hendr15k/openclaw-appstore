@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Hendrik's AppStore">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c63ff"/>
+      <stop offset="100%" stop-color="#e040fb"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="#0a0a0f"/>
+  <rect x="26" y="26" width="204" height="204" rx="46" fill="url(#g)" opacity="0.14"/>
+  <g transform="translate(128 128)">
+    <circle r="74" fill="url(#g)" opacity="0.18"/>
+    <rect x="-54" y="-54" width="108" height="108" rx="28" fill="none" stroke="#ffffff" stroke-width="14"/>
+    <path d="M-36 -18h72M-36 8h72M-36 34h46" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+    <path d="M36 8l18-18 18 18" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

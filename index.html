@@ -5,23 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#6c63ff">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>Hendrik's AppStore</title>
 <style>
-:root{--bg:#0a0a0f;--card:#14141f;--border:#2a2a3a;--text:#e0e0e8;--text-muted:#9090a0;--accent:#6c63ff;--accent-glow:rgba(108,99,255,.3);--green:#00c853;--green-glow:rgba(0,200,83,.2)}
+:root{--bg:#0a0a0f;--card:#14141f;--border:#2a2a3a;--text:#e0e0e8;--text-muted:#9090a0;--accent:#6c63ff;--accent-glow:rgba(108,99,255,.3);--green:#00c853;--green-glow:rgba(0,200,83,.2);--yellow:#ffb300;--red:#ff6b6b}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
 
 /* Gradient Header */
-header{text-align:center;padding:60px 20px 40px;background:linear-gradient(135deg,#1a1a2e 0%,#0a0a0f 100%);border-bottom:1px solid var(--border)}
+header{text-align:center;padding:60px 20px 26px;background:linear-gradient(135deg,#1a1a2e 0%,#0a0a0f 100%);border-bottom:1px solid var(--border)}
 header .logo{width:80px;height:80px;background:linear-gradient(135deg,var(--accent),#e040fb);border-radius:24px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 8px 30px var(--accent-glow)}
 header .logo svg{width:40px;height:40px;color:#fff}
 header h1{font-size:2em;font-weight:800;background:linear-gradient(135deg,var(--accent),#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
 header p{color:var(--text-muted);font-size:.95em}
+.summary-bar{max-width:960px;margin:16px auto 0;padding:12px 14px;border:1px solid rgba(108,99,255,.18);border-radius:14px;background:rgba(108,99,255,.08);color:#cfd0ff;font-size:.9em;text-align:left}
+.summary-bar strong{color:#fff}
+.summary-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.summary-pills{display:flex;flex-wrap:wrap;gap:8px}
+.summary-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);font-size:.78em;color:var(--text-muted)}
+.summary-pill.ok{color:#9ef0b5;border-color:rgba(0,200,83,.2);background:rgba(0,200,83,.08)}
+.summary-pill.warn{color:#ffd78a;border-color:rgba(255,179,0,.2);background:rgba(255,179,0,.08)}
+.summary-pill.offline{color:#ffb3b3;border-color:rgba(255,107,107,.2);background:rgba(255,107,107,.08)}
 
 /* App Grid */
-.container{max-width:960px;margin:0 auto;padding:30px 20px 80px}
+.container{max-width:960px;margin:0 auto;padding:26px 20px 80px}
 .app-grid{display:grid;gap:24px;margin-top:20px}
 .app-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .3s,box-shadow .3s}
 .app-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--accent-glow)}
@@ -32,14 +40,21 @@ header p{color:var(--text-muted);font-size:.95em}
 .app-info{flex:1;min-width:0}
 .app-info h2{font-size:1.3em;font-weight:700;margin-bottom:4px}
 .app-info .subtitle{color:var(--text-muted);font-size:.9em;margin-bottom:12px}
-.app-meta{display:flex;gap:12px;flex-wrap:wrap}
+.app-meta{display:flex;gap:10px;flex-wrap:wrap}
 .app-meta span{display:inline-flex;align-items:center;gap:4px;font-size:.8em;color:var(--text-muted)}
-.app-meta .badge{background:rgba(0,200,83,.1);color:var(--green);padding:2px 8px;border-radius:8px}
+.status-pill{padding:2px 8px;border-radius:999px;font-weight:700;letter-spacing:.02em;border:1px solid transparent}
+.status-pill.ok{background:rgba(0,200,83,.1);color:var(--green);border-color:rgba(0,200,83,.2)}
+.status-pill.warn{background:rgba(255,179,0,.1);color:var(--yellow);border-color:rgba(255,179,0,.2)}
+.status-pill.offline{background:rgba(255,107,107,.1);color:var(--red);border-color:rgba(255,107,107,.2)}
+.app-source{font-size:.76em;color:var(--text-muted)}
 
 /* App Features */
-.app-screenshot{padding:0 24px 12px}.app-screenshot a{display:block}.app-screenshot img{width:100%;max-width:180px;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 15px rgba(0,0,0,.3)}.app-features{padding:0 24px 20px}
+.app-screenshot{padding:0 24px 12px}.app-screenshot a{display:block}.app-screenshot img{width:100%;max-width:200px;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.app-features{padding:0 24px 20px}
 .feature-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .feature{background:rgba(108,99,255,.1);color:var(--accent);font-size:.75em;padding:4px 10px;border-radius:12px}
+.release-note{margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:#c9cada;font-size:.9em}
+.release-note strong{color:#fff}
 
 /* Download Section */
 .app-downloads{padding:16px 24px 24px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px}
@@ -61,10 +76,12 @@ footer a{color:var(--accent)}
 
 /* Responsive */
 @media(max-width:600px){
-.header{padding:40px 16px 30px}
+header{padding:40px 16px 24px}
 header h1{font-size:1.5em}
 .app-header{flex-direction:column;align-items:center;text-align:center}
 .app-downloads{justify-content:center}
+.summary-row{justify-content:center;text-align:center}
+.summary-bar{text-align:center}
 }
 </style>
 </head>
@@ -75,7 +92,8 @@ header h1{font-size:1.5em}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </div>
     <h1>Hendrik's AppStore</h1>
-    <p>Open-Source Android Apps — Direkt als APK herunterladen</p>
+    <p>Open-Source Android Apps — direkt als APK herunterladen, mit Release-Diagnostik statt Blindflug</p>
+    <div class="summary-bar" id="summaryBar">Lade GitHub Release Daten…</div>
 </header>
 
 <div class="container">
@@ -103,7 +121,7 @@ var APPS = [
         iconBg: 'linear-gradient(135deg, #6c63ff, #e040fb)',
         features: ['PDF/TXT Upload', 'Text-to-Speech', 'Sleep Timer', 'Bookmarks', 'Background Audio', 'Offline-Speicher'],
         releaseTag: 'nightly',
-        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/open-reader-screenshot.png'
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/openreader-screenshot.png'
     },
     {
         id: 'bookish-waffle',
@@ -139,22 +157,70 @@ var APPS = [
         iconBg: 'linear-gradient(135deg, #ff6600, #ff3366)',
         features: ['KI-Assistent', 'Smart Home', 'Nachrichten', 'Kalender', 'Open Source'],
         releaseTag: 'v2026.4.2-android',
-        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/openclaw-screenshot.png'
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/openclaw-appstore-screenshot.png'
     }
 ];
 
 var API_BASE = 'https://api.github.com/repos';
 
-function fetchRelease(owner, repo, tag) {
-    var url = API_BASE + '/' + owner + '/' + repo + '/releases/tags/' + tag;
-    return fetch(url)
+function fetchJson(url) {
+    return fetch(url, { cache: 'no-store' })
         .then(function(r) { return r.ok ? r.json() : null; })
-        .catch(function() { return fetch(API_BASE + '/' + owner + '/' + repo + '/releases/latest').then(function(r) { return r.ok ? r.json() : null; }).catch(function(){ return null; }); });
+        .catch(function() { return null; });
 }
 
-function buildAppCard(app, release) {
+function fetchReleaseInfo(app) {
+    var exactUrl = API_BASE + '/' + app.owner + '/' + app.repo + '/releases/tags/' + app.releaseTag;
+    var latestUrl = API_BASE + '/' + app.owner + '/' + app.repo + '/releases/latest';
+    return fetchJson(exactUrl).then(function(exact) {
+        if (exact) return { release: exact, source: 'exact' };
+        return fetchJson(latestUrl).then(function(latest) {
+            return { release: latest, source: latest ? 'latest' : 'none' };
+        });
+    });
+}
+
+function humanBytes(size) {
+    if (!size && size !== 0) return '';
+    var mb = size / (1024 * 1024);
+    return (mb >= 1 ? mb.toFixed(1) : Math.round(size / 1024)) + (mb >= 1 ? ' MB' : ' KB');
+}
+
+function timeAgo(iso) {
+    if (!iso) return '';
+    var delta = Date.now() - new Date(iso).getTime();
+    if (delta < 0) delta = 0;
+    var mins = Math.round(delta / 60000);
+    if (mins < 60) return mins + ' min';
+    var hours = Math.round(mins / 60);
+    if (hours < 24) return hours + ' h';
+    var days = Math.round(hours / 24);
+    return days + ' d';
+}
+
+function excerpt(text, maxLen) {
+    if (!text) return 'Keine Release Notes verfügbar.';
+    var clean = String(text).replace(/\r/g, ' ').replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (clean.length <= maxLen) return clean;
+    return clean.slice(0, maxLen).replace(/\s+\S*$/, '') + '…';
+}
+
+function statusMeta(info) {
+    if (!info || !info.release) {
+        return { label: 'offline', cls: 'offline', detail: 'GitHub API nicht erreichbar oder kein Release gefunden.' };
+    }
+    if (info.source === 'exact') {
+        return { label: 'exact tag', cls: 'ok', detail: 'Release-Tag wurde direkt gefunden.' };
+    }
+    return { label: 'latest fallback', cls: 'warn', detail: 'Exact-Tag fehlte — Dashboard nutzt das neueste Release als Fallback.' };
+}
+
+function buildAppCard(app, info) {
+    var release = info.release;
+    var status = statusMeta(info);
     var version = release ? release.tag_name : 'N/A';
     var published = release ? new Date(release.published_at).toLocaleDateString('de-DE') : '';
+    var age = release ? timeAgo(release.published_at) : '';
     var totalDownloads = release ? (release.assets || []).reduce(function(s, a) { return s + (a.download_count || 0); }, 0) : 0;
     var assets = (release && release.assets) || [];
     var apkAssets = assets.filter(function(a) { return a.name && a.name.toLowerCase().endsWith('.apk'); });
@@ -164,13 +230,14 @@ function buildAppCard(app, release) {
             var isDebug = a.name.indexOf('debug') >= 0;
             var isUnsigned = a.name.indexOf('unsigned') >= 0;
             var label = isDebug ? 'Debug APK' : isUnsigned ? 'Unsigned' : 'Release APK';
-            var size = a.size ? Math.round(a.size / 1024 / 1024) + ' MB' : '';
+            var size = humanBytes(a.size);
             downloadBtns += '<a href="' + a.browser_download_url + '" class="download-btn ' + (isDebug || isUnsigned ? 'secondary' : 'primary') + '" target="_blank" rel="noopener">⬇️ ' + label + ' <span class="size">' + size + '</span></a>';
         });
     } else {
         downloadBtns = '<a href="https://github.com/' + app.owner + '/' + app.repo + '/releases" class="download-btn primary" target="_blank" rel="noopener">⬇️ Alle Releases öffnen</a>';
     }
     var releaseUrl = 'https://github.com/' + app.owner + '/' + app.repo + '/releases';
+    var note = release ? excerpt(release.body || release.name || '', 180) : 'Keine Release-Notes verfügbar. Direkt die Release-Seite öffnen, falls der Fallback leer bleibt.';
 
     return '<div class="app-card">' +
         '<div class="app-header">' +
@@ -179,9 +246,12 @@ function buildAppCard(app, release) {
                 '<h2>' + app.id + '</h2>' +
                 '<div class="subtitle">' + app.tagLine + '</div>' +
                 '<div class="app-meta">' +
-                    '<span class="badge">v' + version + '</span>' +
-                    (published ? '<span>📅 ' + published + '</span>' : '') +
+                    '<span class="status-pill ' + status.cls + '">' + status.label + '</span>' +
+                    '<span>v' + version + '</span>' +
+                    (published ? '<span>📅 ' + published + (age ? ' · ' + age + ' her' : '') + '</span>' : '') +
                     (totalDownloads > 0 ? '<span>⬇️ ' + totalDownloads.toLocaleString('de-DE') + ' Downloads</span>' : '') +
+                    '<span>' + assets.length + ' Assets</span>' +
+                    '<span class="app-source">' + status.detail + '</span>' +
                 '</div>' +
             '</div>' +
         '</div>' +
@@ -189,7 +259,9 @@ function buildAppCard(app, release) {
             '<div class="feature-list">' +
                 app.features.map(function(f) { return '<span class="feature">' + f + '</span>'; }).join('') +
             '</div>' +
-            '<p style="color:var(--text-muted);font-size:.9em">' + app.description + '</p>' + (app.screenshot ? '<a href="' + app.screenshot + '" target="_blank" rel="noopener"><img src="' + app.screenshot + '" alt="Screenshot" style="width:100%;max-width:200px;border-radius:8px;margin-top:8px;box-shadow:0 4px 15px rgba(0,0,0,.3);" loading="lazy" /></a>' : '') +
+            '<p style="color:var(--text-muted);font-size:.9em">' + app.description + '</p>' +
+            '<div class="release-note"><strong>Release-Notiz:</strong> ' + note + '</div>' +
+            (app.screenshot ? '<div class="app-screenshot"><a href="' + app.screenshot + '" target="_blank" rel="noopener"><img src="' + app.screenshot + '" alt="Screenshot von ' + app.id + '" loading="lazy" /></a></div>' : '') +
         '</div>' +
         '<div class="app-downloads">' +
             downloadBtns +
@@ -198,27 +270,38 @@ function buildAppCard(app, release) {
     '</div>';
 }
 
+function updateSummary(results) {
+    var exact = results.filter(function(r) { return r.info.source === 'exact'; }).length;
+    var fallback = results.filter(function(r) { return r.info.source === 'latest'; }).length;
+    var offline = results.filter(function(r) { return !r.info.release; }).length;
+    var ready = results.filter(function(r) { return r.info.release && r.info.release.assets && r.info.release.assets.length; }).length;
+    var ts = new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' });
+
+    document.getElementById('summaryBar').innerHTML =
+        '<div class="summary-row">' +
+            '<div><strong>' + results.length + ' Apps</strong> · ' + ready + ' mit Assets · zuletzt aktualisiert ' + ts + '</div>' +
+            '<div class="summary-pills">' +
+                '<span class="summary-pill ok">' + exact + ' exact</span>' +
+                '<span class="summary-pill warn">' + fallback + ' fallback</span>' +
+                '<span class="summary-pill offline">' + offline + ' offline</span>' +
+            '</div>' +
+        '</div>';
+}
+
 function loadAppStore() {
-    var loaded = 0;
-    var html = '';
-    APPS.forEach(function(app) {
-        fetchRelease(app.owner, app.repo, app.releaseTag).then(function(release) {
-            html += buildAppCard(app, release);
-            loaded++;
-            if (loaded === APPS.length) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('appGrid').innerHTML = html;
-                document.getElementById('appGrid').style.display = 'grid';
-            }
-        }).catch(function() {
-            html += buildAppCard(app, null);
-            loaded++;
-            if (loaded === APPS.length) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('appGrid').innerHTML = html;
-                document.getElementById('appGrid').style.display = 'grid';
-            }
+    Promise.all(APPS.map(function(app) {
+        return fetchReleaseInfo(app).then(function(info) {
+            return { app: app, info: info };
         });
+    })).then(function(results) {
+        var html = results.map(function(item) { return buildAppCard(item.app, item.info); }).join('');
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('appGrid').innerHTML = html;
+        document.getElementById('appGrid').style.display = 'grid';
+        updateSummary(results);
+    }).catch(function() {
+        document.getElementById('loading').innerHTML = '<p>⚠️ Konnte die App-Daten nicht laden.</p>';
+        document.getElementById('summaryBar').innerHTML = '<strong>Warnung:</strong> Release-Daten konnten nicht geladen werden.';
     });
 }
 
@@ -226,7 +309,7 @@ loadAppStore();
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(function() {});
+  navigator.serviceWorker.register('./sw.js').catch(function() {});
 }
 </script>
 </body>
