@@ -37,7 +37,7 @@ header p{color:var(--text-muted);font-size:.95em}
 .app-meta .badge{background:rgba(0,200,83,.1);color:var(--green);padding:2px 8px;border-radius:8px}
 
 /* App Features */
-.app-features{padding:0 24px 20px}
+.app-screenshot{padding:0 24px 12px}.app-screenshot a{display:block}.app-screenshot img{width:100%;max-width:180px;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 15px rgba(0,0,0,.3)}.app-features{padding:0 24px 20px}
 .feature-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .feature{background:rgba(108,99,255,.1);color:var(--accent);font-size:.75em;padding:4px 10px;border-radius:12px}
 
@@ -102,7 +102,8 @@ var APPS = [
         icon: '📖',
         iconBg: 'linear-gradient(135deg, #6c63ff, #e040fb)',
         features: ['PDF/TXT Upload', 'Text-to-Speech', 'Sleep Timer', 'Bookmarks', 'Background Audio', 'Offline-Speicher'],
-        releaseTag: 'nightly'
+        releaseTag: 'nightly',
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/openreader-screenshot.png'
     },
     {
         id: 'bookish-waffle',
@@ -113,7 +114,8 @@ var APPS = [
         icon: '❇️',
         iconBg: 'linear-gradient(135deg, #00c853, #2196F3)',
         features: ['Computer Algebra', '40 Tests', '4x4+ Eigenvalues', 'map() Expressions', 'CI Pipeline', 'Android APK'],
-        releaseTag: 'android-nightly'
+        releaseTag: 'android-nightly',
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/bookish-waffle-screenshot.png'
     },
     {
         id: 'Sci-Fi Empfehlungen',
@@ -124,7 +126,8 @@ var APPS = [
         icon: '🚀',
         iconBg: 'linear-gradient(135deg, #cc55ee, #6c63ff)',
         features: ['143 Titel', '131 Cover-Bilder', 'Reading Tracker', 'CSV/JSON Export', 'Dark/Light Mode', 'Random-Picker'],
-        releaseTag: 'nightly'
+        releaseTag: 'nightly',
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/sci-fi-empfehlungen-screenshot.png'
     },
     {
         id: 'OpenClaw',
@@ -135,7 +138,8 @@ var APPS = [
         icon: '🦞',
         iconBg: 'linear-gradient(135deg, #ff6600, #ff3366)',
         features: ['KI-Assistent', 'Smart Home', 'Nachrichten', 'Kalender', 'Open Source'],
-        releaseTag: 'v2026.4.2-android'
+        releaseTag: 'v2026.4.2-android',
+        screenshot: 'https://hendr15k.github.io/openclaw-appstore/screenshots/openclaw-appstore-screenshot.png'
     }
 ];
 
@@ -185,7 +189,8 @@ function buildAppCard(app, release) {
             '<div class="feature-list">' +
                 app.features.map(function(f) { return '<span class="feature">' + f + '</span>'; }).join('') +
             '</div>' +
-            '<p style="color:var(--text-muted);font-size:.9em">' + app.description + '</p>' +
+            '<p style="color:var(--text-muted);font-size:.9em">' + app.description + '</p>' + (app.screenshot ? '<a href="' + app.screenshot + '" target="_blank" rel="noopener"><img src="' + app.screenshot + '" alt="Screenshot" style="width:100%;max-width:200px;border-radius:8px;margin-top:8px;box-shadow:0 4px 15px rgba(0,0,0,.3);" loading="lazy" /></a>' : '') +
+            (app.screenshot ? '<a href="' + app.screenshot + '" target="_blank" rel="noopener"><img src="' + app.screenshot + '" alt="Screenshot" style="width:100%;max-width:200px;border-radius:8px;margin-top:8px;" loading="lazy" /></a>' : '') +
         '</div>' +
         '<div class="app-downloads">' +
             downloadBtns +
