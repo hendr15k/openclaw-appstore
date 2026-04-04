@@ -24,7 +24,7 @@ header p{color:var(--text-muted);font-size:.95em}
 
 /* App Header */
 .app-header{padding:24px;display:flex;align-items:flex-start;gap:16px}
-.app-icon{width:72px;height:72px;border-radius:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff}
+.app-icon{width:72px;height:72px;border-radius:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff}
 .app-info{flex:1;min-width:0}
 .app-info h2{font-size:1.3em;font-weight:700;margin-bottom:4px}
 .app-info .subtitle{color:var(--text-muted);font-size:.9em;margin-bottom:12px}
@@ -88,17 +88,16 @@ header h1{font-size:1.5em}
 </footer>
 
 <script>
-// App Registry
 var APPS = [
     {
-        id: 'open-reader',
+        id: 'Open Reader',
         owner: 'hendr15k',
         repo: 'open-reader',
-        tagLine: 'PDF, TXT \u2192 H\u00f6rbuch mit TTS',
-        description: 'ElevenReader-Alternative \u2014 Lade PDFs, TXTs und HTML-Dateien hoch und lass sie dir vorlesen. Mit Sleep Timer, Bookmarks, Background Audio und Immersive Mode.',
-        icon: '\ud83d\udcd6',
+        tagLine: 'PDF, TXT → Hörbuch mit TTS',
+        description: 'ElevenReader-Alternative — Lade PDFs, TXTs und HTML-Dateien hoch und lass sie dir vorlesen. Mit Sleep Timer, Bookmarks, Background Audio und Immersive Mode.',
+        icon: '📖',
         iconBg: 'linear-gradient(135deg, #6c63ff, #e040fb)',
-        features: ['PDF/TXT Upload', 'Text-to-Speech', 'Sleep Timer', 'Bookmarks', 'Background Audio', 'Offline-Speicher', 'Immersive Mode', 'Grid/Library'],
+        features: ['PDF/TXT Upload', 'Text-to-Speech', 'Sleep Timer', 'Bookmarks', 'Background Audio', 'Offline-Speicher'],
         releaseTag: 'nightly'
     },
     {
@@ -106,81 +105,75 @@ var APPS = [
         owner: 'hendr15k',
         repo: 'bookish-waffle',
         tagLine: 'Browser-basiertes Computer Algebra System',
-        description: 'Web CAS mit Xcas-Syntax \u2014 Matrizen, Analysis, Algebra, Grafiken und mehr. 40 Tests, GitHub Actions CI, jetzt auch als Android-App verf\u00fcgbar.',
-        icon: '\u2747\ufe0f',
+        description: 'Web CAS mit Xcas-Syntax — Matrizen, Analysis, Algebra, Grafiken und mehr. 40 Tests, GitHub Actions CI, jetzt auch als Android-App verfügbar.',
+        icon: '❇️',
         iconBg: 'linear-gradient(135deg, #00c853, #2196F3)',
         features: ['Computer Algebra', '40 Tests', '4x4+ Eigenvalues', 'map() Expressions', 'CI Pipeline', 'Android APK'],
         releaseTag: 'android-nightly'
     },
     {
-        id: 'openclaw',
+        id: 'Sci-Fi Empfehlungen',
+        owner: 'hendr15k',
+        repo: 'sci-fi-app',
+        tagLine: '143 kuratierte Sci-Fi-Empfehlungen',
+        description: 'Die Sci-Fi Empfehlungssammlung als App — mit 131 Cover-Bildern, Reading Tracker, Export und Filtern. Lädt Inhalte live von GitHub Pages.',
+        icon: '🚀',
+        iconBg: 'linear-gradient(135deg, #cc55ee, #6c63ff)',
+        features: ['143 Titel', '131 Cover-Bilder', 'Reading Tracker', 'CSV/JSON Export', 'Dark/Light Mode', 'Random-Picker'],
+        releaseTag: 'nightly'
+    },
+    {
+        id: 'OpenClaw',
         owner: 'hendr15k',
         repo: 'openclaw',
-        tagLine: 'Dein pers\u00f6nlicher KI-Assistent',
-        description: 'OpenClaw \u2014 Der KI-Assistent mit vollem Zugriff auf deine Ger\u00e4te, Nachrichten, Kalender und Smart Home. L\u00e4uft auf jedem Android-Ger\u00e4t.',
-        icon: '\ud83e\udd9e',
+        tagLine: 'Dein persönlicher KI-Assistent',
+        description: 'OpenClaw — Der KI-Assistent mit vollem Zugriff auf deine Geräte, Nachrichten, Kalender und Smart Home. Läuft auf jedem Android-Gerät.',
+        icon: '🦞',
         iconBg: 'linear-gradient(135deg, #ff6600, #ff3366)',
         features: ['KI-Assistent', 'Smart Home', 'Nachrichten', 'Kalender', 'Open Source'],
         releaseTag: 'v2026.4.2-android'
     }
 ];
 
-// GitHub API
 var API_BASE = 'https://api.github.com/repos';
 
 function fetchRelease(owner, repo, tag) {
     var url = API_BASE + '/' + owner + '/' + repo + '/releases/tags/' + tag;
     return fetch(url)
         .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(data) {
-            if (!data) return fetchLatestRelease(owner, repo);
-            return data;
-        })
-        .catch(function() { return fetchLatestRelease(owner, repo); });
-}
-
-function fetchLatestRelease(owner, repo) {
-    return fetch(API_BASE + '/' + owner + '/' + repo + '/releases/latest')
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .catch(function() { return null; });
+        .catch(function() { return fetch(API_BASE + '/' + owner + '/' + repo + '/releases/latest').then(function(r) { return r.ok ? r.json() : null; }).catch(function(){ return null; }); });
 }
 
 function buildAppCard(app, release) {
     var version = release ? release.tag_name : 'N/A';
     var published = release ? new Date(release.published_at).toLocaleDateString('de-DE') : '';
     var totalDownloads = release ? (release.assets || []).reduce(function(s, a) { return s + (a.download_count || 0); }, 0) : 0;
-
     var assets = (release && release.assets) || [];
     var apkAssets = assets.filter(function(a) { return a.name && a.name.toLowerCase().endsWith('.apk'); });
-
     var downloadBtns = '';
     if (apkAssets.length > 0) {
         apkAssets.forEach(function(a) {
             var isDebug = a.name.indexOf('debug') >= 0;
             var isUnsigned = a.name.indexOf('unsigned') >= 0;
-            var isPlay = a.name.indexOf('play') >= 0;
-            var label = isDebug ? 'Debug APK' : isUnsigned ? 'Unsigned' : isPlay ? 'Release APK' : a.name.replace(/\.apk$/i, '');
+            var label = isDebug ? 'Debug APK' : isUnsigned ? 'Unsigned' : 'Release APK';
             var size = a.size ? Math.round(a.size / 1024 / 1024) + ' MB' : '';
-            var btnClass = isDebug || isUnsigned ? 'secondary' : 'primary';
-            downloadBtns += '<a href="' + a.browser_download_url + '" class="download-btn ' + btnClass + '" target="_blank" rel="noopener">' +
-                '\u2b07\uFE0F ' + label + ' <span class="size">' + size + '</span></a>';
+            downloadBtns += '<a href="' + a.browser_download_url + '" class="download-btn ' + (isDebug || isUnsigned ? 'secondary' : 'primary') + '" target="_blank" rel="noopener">⬇️ ' + label + ' <span class="size">' + size + '</span></a>';
         });
     } else {
-        downloadBtns = '<a href="https://github.com/' + app.owner + '/' + app.repo + '/releases" class="download-btn primary" target="_blank" rel="noopener">\u2b07\uFE0F Alle Releases \u00f6ffnen</a>';
+        downloadBtns = '<a href="https://github.com/' + app.owner + '/' + app.repo + '/releases" class="download-btn primary" target="_blank" rel="noopener">⬇️ Alle Releases öffnen</a>';
     }
-
     var releaseUrl = 'https://github.com/' + app.owner + '/' + app.repo + '/releases';
 
     return '<div class="app-card">' +
         '<div class="app-header">' +
             '<div class="app-icon" style="background:' + app.iconBg + '">' + app.icon + '</div>' +
             '<div class="app-info">' +
-                '<h2>' + app.id.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); }) + '</h2>' +
+                '<h2>' + app.id + '</h2>' +
                 '<div class="subtitle">' + app.tagLine + '</div>' +
                 '<div class="app-meta">' +
                     '<span class="badge">v' + version + '</span>' +
-                    (published ? '<span>\ud83d\udcc5 ' + published + '</span>' : '') +
-                    (totalDownloads > 0 ? '<span>\u2b07\uFE0F ' + totalDownloads.toLocaleString('de-DE') + ' Downloads</span>' : '') +
+                    (published ? '<span>📅 ' + published + '</span>' : '') +
+                    (totalDownloads > 0 ? '<span>⬇️ ' + totalDownloads.toLocaleString('de-DE') + ' Downloads</span>' : '') +
                 '</div>' +
             '</div>' +
         '</div>' +
@@ -192,16 +185,14 @@ function buildAppCard(app, release) {
         '</div>' +
         '<div class="app-downloads">' +
             downloadBtns +
-            '<a href="' + releaseUrl + '" class="download-btn secondary" target="_blank" rel="noopener">\ud83d\udcc2 Release-Seite</a>' +
+            '<a href="' + releaseUrl + '" class="download-btn secondary" target="_blank" rel="noopener">📂 Release-Seite</a>' +
         '</div>' +
     '</div>';
 }
 
-// Load all apps
 function loadAppStore() {
     var loaded = 0;
     var html = '';
-
     APPS.forEach(function(app) {
         fetchRelease(app.owner, app.repo, app.releaseTag).then(function(release) {
             html += buildAppCard(app, release);
