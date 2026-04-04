@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6c63ff">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Hendrik's AppStore</title>
 <style>
 :root{--bg:#0a0a0f;--card:#14141f;--border:#2a2a3a;--text:#e0e0e8;--text-muted:#9090a0;--accent:#6c63ff;--accent-glow:rgba(108,99,255,.3);--green:#00c853;--green-glow:rgba(0,200,83,.2)}
@@ -215,6 +219,11 @@ function loadAppStore() {
 }
 
 loadAppStore();
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function() {});
+}
 </script>
 </body>
 </html>
