@@ -1,2 +1,4 @@
 commit	score	description
 baseline	1	Initial baseline: lazy-loading only, 12.4KB inline HTML, no features, single column
+e53f2d3	9	8 improvements: skeleton loading, responsive grid, entrance animations, search/filter, screenshot modal, release notes, PWA install, categories
+current	10	CSS in external file still needed but Non-blocking scripts (app.js), still 11KB, no version history
