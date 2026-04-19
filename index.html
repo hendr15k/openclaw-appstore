@@ -28,6 +28,12 @@ header p{color:var(--text-muted);font-size:.95em}
 .summary-pill.warn{color:#ffd78a;border-color:rgba(255,179,0,.2);background:rgba(255,179,0,.08)}
 .summary-pill.offline{color:#ffb3b3;border-color:rgba(255,107,107,.2);background:rgba(255,107,107,.08)}
 
+/* Category filter */
+.filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cat-pill{padding:6px 14px;border-radius:999px;font-size:.82em;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text-muted);cursor:pointer;transition:all .2s}
+.cat-pill:hover,.cat-pill.active{background:rgba(108,99,255,.15);border-color:var(--accent);color:var(--accent)}
+.cat-pill .count{opacity:.6;font-weight:400}
+
 /* App Grid */
 .container{max-width:960px;margin:0 auto;padding:26px 20px 80px}
 .app-grid{display:grid;gap:24px;margin-top:20px}
@@ -97,6 +103,13 @@ header h1{font-size:1.5em}
 </header>
 
 <div class="container">
+    <div class="filter-bar" id="categoryFilter">
+        <button class="cat-pill active" id="cat-all" onclick="filterByCategory('all', this)">Alle <span class="count">0</span></button>
+    </div>
+    <div style="margin-bottom:14px;position:relative">
+        <input id="searchInput" type="text" placeholder="Apps durchsuchen..." style="width:100%;padding:12px 16px 12px 44px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:1em;outline:none" oninput="filterApps(this.value)" />
+        <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--text-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
     <div id="loading" class="loading">
         <div class="spinner"></div>
         <p>Lade App-Informationen...</p>
@@ -115,6 +128,7 @@ var APPS = [
         id: 'Open Reader',
         owner: 'hendr15k',
         repo: 'open-reader',
+        category: 'Lesen',
         tagLine: 'PDF, TXT → Hörbuch mit TTS',
         description: 'ElevenReader-Alternative — Lade PDFs, TXTs und HTML-Dateien hoch und lass sie dir vorlesen. Mit Sleep Timer, Bookmarks, Background Audio und Immersive Mode.',
         icon: '📖',
@@ -127,6 +141,7 @@ var APPS = [
         id: 'bookish-waffle',
         owner: 'hendr15k',
         repo: 'bookish-waffle',
+        category: 'Wissenschaft',
         tagLine: 'Browser-basiertes Computer Algebra System',
         description: 'Web CAS mit Xcas-Syntax — Matrizen, Analysis, Algebra, Grafiken und mehr. 40 Tests, GitHub Actions CI, jetzt auch als Android-App verfügbar.',
         icon: '❇️',
@@ -139,6 +154,7 @@ var APPS = [
         id: 'Sci-Fi Empfehlungen',
         owner: 'hendr15k',
         repo: 'sci-fi-app',
+        category: 'Lesen',
         tagLine: '143 kuratierte Sci-Fi-Empfehlungen',
         description: 'Die Sci-Fi Empfehlungssammlung als App — mit 131 Cover-Bildern, Reading Tracker, Export und Filtern. Lädt Inhalte live von GitHub Pages.',
         icon: '🚀',
@@ -151,6 +167,7 @@ var APPS = [
         id: 'OpenClaw',
         owner: 'hendr15k',
         repo: 'openclaw',
+        category: 'Tools',
         tagLine: 'Dein persönlicher KI-Assistent',
         description: 'OpenClaw — Der KI-Assistent mit vollem Zugriff auf deine Geräte, Nachrichten, Kalender und Smart Home. Läuft auf jedem Android-Gerät.',
         icon: '🦞',
@@ -239,7 +256,7 @@ function buildAppCard(app, info) {
     var releaseUrl = 'https://github.com/' + app.owner + '/' + app.repo + '/releases';
     var note = release ? excerpt(release.body || release.name || '', 180) : 'Keine Release-Notes verfügbar. Direkt die Release-Seite öffnen, falls der Fallback leer bleibt.';
 
-    return '<div class="app-card">' +
+    return '<div class="app-card" data-category="' + (app.category || 'General') + '">' +
         '<div class="app-header">' +
             '<div class="app-icon" style="background:' + app.iconBg + '">' + app.icon + '</div>' +
             '<div class="app-info">' +
@@ -299,10 +316,56 @@ function loadAppStore() {
         document.getElementById('appGrid').innerHTML = html;
         document.getElementById('appGrid').style.display = 'grid';
         updateSummary(results);
+        initCategoryFilter();
     }).catch(function() {
         document.getElementById('loading').innerHTML = '<p>⚠️ Konnte die App-Daten nicht laden.</p>';
         document.getElementById('summaryBar').innerHTML = '<strong>Warnung:</strong> Release-Daten konnten nicht geladen werden.';
+        initCategoryFilter();
     });
+}
+
+var activeCategory = 'all';
+
+function filterByCategory(cat, btn) {
+    activeCategory = cat;
+    document.querySelectorAll('.cat-pill').forEach(function(p) { p.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    applyFilters();
+}
+
+function initCategoryFilter() {
+    var counts = { all: APPS.length };
+    var cats = [];
+    APPS.forEach(function(app) {
+        var cat = app.category || 'General';
+        if (!counts[cat]) { counts[cat] = 0; cats.push(cat); }
+        counts[cat]++;
+    });
+    document.getElementById('count-all').textContent = counts.all;
+    var container = document.getElementById('categoryFilter');
+    cats.forEach(function(cat) {
+        var btn = document.createElement('button');
+        btn.className = 'cat-pill';
+        btn.setAttribute('data-cat', cat);
+        btn.innerHTML = cat + ' <span class="count">' + counts[cat] + '</span>';
+        btn.onclick = function() { filterByCategory(cat, btn); };
+        container.appendChild(btn);
+    });
+}
+
+function applyFilters() {
+    var q = (document.getElementById('searchInput') || {}).value || '';
+    var qLower = q.toLowerCase();
+    var cards = document.querySelectorAll('.app-card');
+    cards.forEach(function(card) {
+        var matchCat = activeCategory === 'all' || card.getAttribute('data-category') === activeCategory;
+        var matchSearch = !qLower || card.textContent.toLowerCase().indexOf(qLower) !== -1;
+        card.style.display = matchCat && matchSearch ? '' : 'none';
+    });
+}
+
+function filterApps(query) {
+    applyFilters();
 }
 
 loadAppStore();

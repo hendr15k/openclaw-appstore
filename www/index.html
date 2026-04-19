@@ -20,6 +20,12 @@ header .logo svg{width:40px;height:40px;color:#fff}
 header h1{font-size:2em;font-weight:800;background:linear-gradient(135deg,var(--accent),#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
 header p{color:var(--text-muted);font-size:.95em}
 
+/* Category filter */
+.filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cat-pill{padding:6px 14px;border-radius:999px;font-size:.82em;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text-muted);cursor:pointer;transition:all .2s}
+.cat-pill:hover,.cat-pill.active{background:rgba(108,99,255,.15);border-color:var(--accent);color:var(--accent)}
+.cat-pill .count{opacity:.6;font-weight:400}
+
 /* App Grid */
 .container{max-width:1100px;margin:0 auto;padding:30px 20px 80px}
 .app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:24px;margin-top:20px}
@@ -106,6 +112,9 @@ header h1{font-size:1.5em}
 <div class="modal-overlay" id="screenshotModal" onclick="closeModal()"><button class="modal-close" onclick="closeModal()">✕</button><img id="modalImage" src="" alt="Screenshot" loading="lazy" /></div>
 
 <div class="container">
+    <div class="filter-bar" id="categoryFilter">
+        <button class="cat-pill active" id="cat-all" onclick="filterByCategory('all', this)">Alle <span class="count">0</span></button>
+    </div>
     <div style="margin-bottom:20px;position:relative">
         <input id="searchInput" type="text" placeholder="Apps durchsuchen..." style="width:100%;padding:12px 16px 12px 44px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:1em;outline:none" oninput="filterApps(this.value)" />
         <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--text-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
