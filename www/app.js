@@ -69,6 +69,7 @@ function loadAppStore() {
             if (loaded === APPS.length) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('appGrid').innerHTML = html;
+                initCategoryFilter();
             }
         }).catch(function() {
             html += buildAppCard(app, null);
@@ -76,6 +77,7 @@ function loadAppStore() {
             if (loaded === APPS.length) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('appGrid').innerHTML = html;
+                initCategoryFilter();
             }
         });
     });
@@ -83,13 +85,48 @@ function loadAppStore() {
 
 loadAppStore();
 
-function filterApps(query) {
-    var cards = document.querySelectorAll('.app-card');
-    var q = query.toLowerCase();
-    cards.forEach(function(card) {
-        var text = card.textContent.toLowerCase();
-        card.style.display = text.indexOf(q) !== -1 ? '' : 'none';
+var activeCategory = 'all';
+
+function filterByCategory(cat, btn) {
+    activeCategory = cat;
+    document.querySelectorAll('.cat-pill').forEach(function(p) { p.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    applyFilters();
+}
+
+function initCategoryFilter() {
+    var counts = { all: APPS.length };
+    var cats = [];
+    APPS.forEach(function(app) {
+        var cat = app.category || 'General';
+        if (!counts[cat]) { counts[cat] = 0; cats.push(cat); }
+        counts[cat]++;
     });
+    var container = document.getElementById('categoryFilter');
+    document.getElementById('count-all').textContent = counts.all;
+    cats.forEach(function(cat) {
+        var btn = document.createElement('button');
+        btn.className = 'cat-pill';
+        btn.setAttribute('data-cat', cat);
+        btn.innerHTML = cat + ' <span class="count">' + counts[cat] + '</span>';
+        btn.onclick = function() { filterByCategory(cat, btn); };
+        container.appendChild(btn);
+    });
+}
+
+function applyFilters() {
+    var q = (document.getElementById('searchInput') || {}).value || '';
+    var qLower = q.toLowerCase();
+    var cards = document.querySelectorAll('.app-card');
+    cards.forEach(function(card) {
+        var matchCat = activeCategory === 'all' || card.getAttribute('data-category') === activeCategory;
+        var matchSearch = !qLower || card.textContent.toLowerCase().indexOf(qLower) !== -1;
+        card.style.display = matchCat && matchSearch ? '' : 'none';
+    });
+}
+
+function filterApps(query) {
+    applyFilters();
 }
 
 function openModal(src) {
